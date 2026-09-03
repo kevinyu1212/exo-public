@@ -1,0 +1,16 @@
+﻿services:
+  db:
+    image: postgres:16-alpine
+    container_name: exo-public-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: exo_public
+    ports:
+      - "5432:5432"
+    volumes:
+      - exo_public_pgdata:/var/lib/postgresql/data
+
+volumes:
+  exo_public_pgdata:
