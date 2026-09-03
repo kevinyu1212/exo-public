@@ -1,0 +1,136 @@
+﻿generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  UNKNOWN
+}
+
+enum PetStatus {
+  BREEDING
+  GROWING
+  ADOPTION_READY
+}
+
+enum MarketCategory {
+  TARANTULA
+  SCORPION
+  REPTILE
+  INSECT
+}
+
+enum TradeMethod {
+  DIRECT
+  DELIVERY
+  BOTH
+}
+
+enum ListingStatus {
+  AVAILABLE
+  RESERVED
+  COMPLETED
+}
+
+model User {
+  id              String           @id @default(uuid())
+  email           String           @unique
+  passwordHash    String
+  nickname        String
+  profileImageUrl String?
+  bio             String?
+  region          String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  profile         UserProfile?
+  pets            Pet[]
+  listings        MarketListing[]
+  communityPosts  CommunityPost[]
+  followers       UserConnection[] @relation("following")
+  following       UserConnection[] @relation("follower")
+}
+
+model UserProfile {
+  id            String   @id @default(uuid())
+  userId        String   @unique
+  breedingYears Int      @default(0)
+  mainSpecies   String[]
+  trustScore    Float    @default(0)
+
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model UserConnection {
+  id          String   @id @default(uuid())
+  followerId  String
+  followingId String
+  createdAt   DateTime @default(now())
+
+  follower    User @relation("follower", fields: [followerId], references: [id], onDelete: Cascade)
+  following   User @relation("following", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@unique([followerId, followingId])
+  @@index([followingId])
+}
+
+model Pet {
+  id               String          @id @default(uuid())
+  userId           String
+  speciesName      String
+  morphOrVariant   String?
+  birthOrHatchDate DateTime?
+  gender           Gender          @default(UNKNOWN)
+  status           PetStatus       @default(GROWING)
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+
+  owner            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listings         MarketListing[]
+
+  @@index([userId])
+  @@index([speciesName])
+}
+
+model MarketListing {
+  id          String         @id @default(uuid())
+  sellerId    String
+  petId       String?
+  title       String
+  category    MarketCategory
+  price       Int
+  tradeMethod TradeMethod
+  content     String
+  status      ListingStatus  @default(AVAILABLE)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  seller      User           @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  pet         Pet?           @relation(fields: [petId], references: [id], onDelete: SetNull)
+
+  @@index([sellerId])
+  @@index([category])
+  @@index([status])
+}
+
+model CommunityPost {
+  id          String   @id @default(uuid())
+  authorId    String
+  categoryTag String
+  title       String
+  content     String
+  viewCount   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([authorId])
+  @@index([categoryTag])
+  @@index([createdAt])
+}
