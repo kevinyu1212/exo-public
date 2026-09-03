@@ -1,9 +1,10 @@
-﻿generator client {
+generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 enum Gender {
@@ -134,3 +135,4 @@ model CommunityPost {
   @@index([categoryTag])
   @@index([createdAt])
 }
+
