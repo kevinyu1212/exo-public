@@ -1,6 +1,7 @@
 ﻿'use client';
 
 import Link from 'next/link';
+import Header from '@/components/common/header';
 import { useEffect, useState } from 'react';
 
 const categories = [
@@ -235,3 +236,4 @@ export default function Home() {
     </main>
   );
 }
+
