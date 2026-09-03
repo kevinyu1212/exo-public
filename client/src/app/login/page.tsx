@@ -3,8 +3,11 @@
 import Link from 'next/link';
 import { FormEvent, useState } from 'react';
 import { login } from '@/lib/auth-api';
+import { useAuthStore } from '@/stores/auth-store';
 
 export default function LoginPage() {
+  const setAuth = useAuthStore((state) => state.setAuth);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -17,8 +20,7 @@ export default function LoginPage() {
 
     try {
       const result = await login(email, password);
-      localStorage.setItem('accessToken', result.accessToken);
-      localStorage.setItem('user', JSON.stringify(result.user));
+      setAuth(result.user, result.accessToken);
       window.location.href = '/';
     } catch (error) {
       setError(error instanceof Error ? error.message : '로그인에 실패했습니다.');
@@ -78,3 +80,4 @@ export default function LoginPage() {
     </main>
   );
 }
+

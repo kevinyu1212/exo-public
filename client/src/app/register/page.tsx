@@ -3,8 +3,11 @@
 import Link from 'next/link';
 import { FormEvent, useState } from 'react';
 import { register } from '@/lib/auth-api';
+import { useAuthStore } from '@/stores/auth-store';
 
 export default function RegisterPage() {
+  const setAuth = useAuthStore((state) => state.setAuth);
+
   const [form, setForm] = useState({
     email: '',
     password: '',
@@ -33,8 +36,7 @@ export default function RegisterPage() {
         bio: form.bio || undefined,
       });
 
-      localStorage.setItem('accessToken', result.accessToken);
-      localStorage.setItem('user', JSON.stringify(result.user));
+      setAuth(result.user, result.accessToken);
       window.location.href = '/';
     } catch (error) {
       setError(error instanceof Error ? error.message : '회원가입에 실패했습니다.');
@@ -118,3 +120,4 @@ export default function RegisterPage() {
     </main>
   );
 }
+

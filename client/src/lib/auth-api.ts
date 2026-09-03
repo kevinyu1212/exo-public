@@ -58,3 +58,11 @@ export function register(payload: {
     body: JSON.stringify(payload),
   });
 }
+
+export function getMe(token: string) {
+  return request<User>('/auth/me', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
