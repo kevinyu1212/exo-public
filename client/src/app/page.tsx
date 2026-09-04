@@ -2,13 +2,34 @@
 
 import Link from 'next/link';
 import Header from '@/components/common/header';
+import CategoryCard from '@/components/home/category-card';
 import { useEffect, useState } from 'react';
 
 const categories = [
-  { name: '타란툴라', emoji: '🕷️', description: '탈피와 사육 노하우' },
-  { name: '전갈', emoji: '🦂', description: '종별 정보와 커넥션' },
-  { name: '파충류', emoji: '🦎', description: '건강한 입양과 기록' },
-  { name: '희귀 곤충', emoji: '🪲', description: '브리더와 개체 정보' },
+  {
+    name: '타란툴라',
+    emoji: '🕷️',
+    description: '탈피와 사육 노하우',
+    slug: 'tarantula',
+  },
+  {
+    name: '전갈',
+    emoji: '🦂',
+    description: '종별 정보와 커넥션',
+    slug: 'scorpion',
+  },
+  {
+    name: '파충류',
+    emoji: '🦎',
+    description: '건강한 입양과 기록',
+    slug: 'reptile',
+  },
+  {
+    name: '희귀 곤충',
+    emoji: '🪲',
+    description: '브리더와 개체 정보',
+    slug: 'insect',
+  },
 ];
 
 const listings = [
@@ -167,15 +188,7 @@ export default function Home() {
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {categories.map((category) => (
-            <Link
-              href="/community"
-              key={category.name}
-              className="rounded-2xl border border-[#e0e8dd] bg-white p-6 transition hover:-translate-y-1 hover:border-[#b7d39f] hover:shadow-lg"
-            >
-              <span className="text-4xl">{category.emoji}</span>
-              <h3 className="mt-5 text-xl font-black">{category.name}</h3>
-              <p className="mt-2 text-sm text-[#718076]">{category.description}</p>
-            </Link>
+            <CategoryCard key={category.name} {...category} />
           ))}
         </div>
       </section>
@@ -236,4 +249,7 @@ export default function Home() {
     </main>
   );
 }
+
+
+
 
