@@ -1,11 +1,13 @@
 ﻿'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
 import { login } from '@/lib/auth-api';
 import { useAuthStore } from '@/stores/auth-store';
 
 export default function LoginPage() {
+  const router = useRouter();
   const setAuth = useAuthStore((state) => state.setAuth);
 
   const [email, setEmail] = useState('');
@@ -21,7 +23,7 @@ export default function LoginPage() {
     try {
       const result = await login(email, password);
       setAuth(result.user, result.accessToken);
-      window.location.href = '/';
+      router.push('/');
     } catch (error) {
       setError(error instanceof Error ? error.message : '로그인에 실패했습니다.');
     } finally {
@@ -80,4 +82,5 @@ export default function LoginPage() {
     </main>
   );
 }
+
 

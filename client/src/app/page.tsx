@@ -1,7 +1,6 @@
 ﻿'use client';
 
 import Link from 'next/link';
-import Header from '@/components/common/header';
 import CategoryCard from '@/components/home/category-card';
 import { useEffect, useState } from 'react';
 
@@ -70,6 +69,8 @@ export default function Home() {
 
     if (savedUser) {
       try {
+        // 로그인 상태는 AuthInitializer와 전역 스토어에서 관리합니다.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setUser(JSON.parse(savedUser));
       } catch {
         localStorage.removeItem('user');
@@ -249,6 +250,9 @@ export default function Home() {
     </main>
   );
 }
+
+
+
 
 
 

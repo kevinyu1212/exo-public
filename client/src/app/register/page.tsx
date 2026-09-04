@@ -1,11 +1,13 @@
-﻿'use client';
+'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
 import { register } from '@/lib/auth-api';
 import { useAuthStore } from '@/stores/auth-store';
 
 export default function RegisterPage() {
+  const router = useRouter();
   const setAuth = useAuthStore((state) => state.setAuth);
 
   const [form, setForm] = useState({
@@ -37,7 +39,7 @@ export default function RegisterPage() {
       });
 
       setAuth(result.user, result.accessToken);
-      window.location.href = '/';
+      router.push('/');
     } catch (error) {
       setError(error instanceof Error ? error.message : '회원가입에 실패했습니다.');
     } finally {
@@ -120,4 +122,5 @@ export default function RegisterPage() {
     </main>
   );
 }
+
 
